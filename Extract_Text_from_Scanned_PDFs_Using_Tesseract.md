@@ -54,7 +54,7 @@ display(img)
 - 扫描的 PDF 基本上是文本照片，而不是真实文本。
 - OCR（光学字符识别）不能直接用于 PDF，它需要文本图像。
 ## 第 5 步：预处理图像以提高 OCR 准确性
-为什么我们需要预处理？
+**为什么我们需要预处理？**
 
 当文本清晰且定义明确时，OCR 效果最佳。如果图像嘈杂、模糊或对比度差，OCR 引擎可能难以正确识别字符。
 <img width="1077" height="748" alt="image" src="https://github.com/user-attachments/assets/b0ec4ab1-b7f7-4f68-a072-6a4a2a9d2ad2" />
@@ -69,7 +69,7 @@ gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
 # Display the grayscale image
 display(Image.fromarray(gray))
 ```
-为什么选择灰度？
+**为什么选择灰度？**
 - 减少不必要的细节。
 - 帮助 OCR 专注于实际文本，而不是颜色或背景。
 ### 使用自适应阈值增强对比度
@@ -81,7 +81,7 @@ gray = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_B
 # Display the processed image
 display(Image.fromarray(gray))
 ```
-为什么要增强对比度？
+**为什么要增强对比度？**
 - 使OCR的微弱文本更粗。
 - 处理光照中的阴影和变化。
  
@@ -94,7 +94,7 @@ gray = cv2.bilateralFilter(gray, 9, 75, 75)
 # Display the processed image
 display(Image.fromarray(gray))
 ```
-为什么要降噪？
+**为什么要降噪？**
 - 去除 OCR 可能误解的不需要的斑点。
 - 保持文本边缘清晰，使字符不会模糊。
 ### 调整图像大小以提高OCR精度
@@ -109,7 +109,7 @@ gray = cv2.resize(gray, (width, height), interpolation=cv2.INTER_CUBIC)
 # Display the resized image
 display(Image.fromarray(gray))
 ```
-为什么要调整大小？
+**为什么要调整大小？**
 - 放大小文本，以便OCR可以更准确地识别字母。
 - 防止OCR误读微小字符。
  
