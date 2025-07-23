@@ -8,3 +8,8 @@ OCR：教机器从图像中读取文本
 - OpenCV – 帮助清理图像并在检测到的文本周围绘制框。
 - Pillow(PIL) – 让我们在 Colab 中显示和处理图像
 - NumPy – 处理数字并使处理图像更容易。
+⚠️重要！ 如果您使用的是 Google Colab，则必须手动安装 Tesseract OCR，因为默认情况下不包含它。
+'''
+!apt install -y tesseract-ocr  # Install Tesseract OCR
+!pip install pymupdf pytesseract opencv-python pillow numpy  # Install required Python libraries
+'''
