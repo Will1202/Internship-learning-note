@@ -112,4 +112,32 @@ display(Image.fromarray(gray))
 **为什么要调整大小？**
 - 放大小文本，以便OCR可以更准确地识别字母。
 - 防止OCR误读微小字符。
+
+## 步骤 6：对预处理图像运行 OCR
+使用 Tesseract OCR 提取文本，Tesseract 提供了多种文本提取选项，但对于扫描文档来说，最好的方法是使用优化的配置。
+```
+# Run OCR on the preprocessed image
+custom_config = r'--oem 3 -l eng'
+ocr_text = pytesseract.image_to_string(gray, config=custom_config)
+
+# Print extracted text
+print("OCR Extracted Text:\n")
+print(ocr_text)
+```
+**-oem 3**: 使用基于AI（基于LSTM的模型）的最佳OCR引擎。
+**l eng**:指定文本为英文。
+如果一切正常，我们应该会看到从扫描文档中提取的文本打印在终端上。
+然而，OCR 并非完美无缺——有时它会误读字符、添加空格或漏掉单词。
+
+## 清理 OCR 输出
+OCR 文本经常包含错误、不必要的空格或奇怪的格式。我们需要对其进行清理，使其更具可读性和结构性。
+- Tesseract 有时会将文本拆分成多行，但实际上并不应该拆分。让我们来移除这些多余的换行符和空格。
+```
+# Remove excessive newlines and extra spaces
+ocr_text = " ".join(ocr_text.split())
+print("Cleaned OCR Text:\n", ocr_text)
+```
+**.split()** 将文本分解为单词列表。
+**" ".join(... )**将单词用单个空格重新组合在一起，删除多余的空格和换行符。
+
  
