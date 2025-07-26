@@ -113,7 +113,7 @@ display(Image.fromarray(gray))
 - 放大小文本，以便OCR可以更准确地识别字母。
 - 防止OCR误读微小字符。
 
-## 步骤 6：对预处理图像运行 OCR
+##  第 6 步：对预处理图像运行 OCR
 使用 Tesseract OCR 提取文本，Tesseract 提供了多种文本提取选项，但对于扫描文档来说，最好的方法是使用优化的配置。
 ```
 # Run OCR on the preprocessed image
@@ -130,7 +130,7 @@ print(ocr_text)
 如果一切正常，我们应该会看到从扫描文档中提取的文本打印在终端上。
 然而，OCR 并非完美无缺——有时它会误读字符、添加空格或漏掉单词。
 
-## 清理 OCR 输出
+## 第7步: 清理 OCR 输出
 OCR 文本经常包含错误、不必要的空格或奇怪的格式。我们需要对其进行清理，使其更具可读性和结构性。
 - Tesseract 有时会将文本拆分成多行，但实际上并不应该拆分。让我们来移除这些多余的换行符和空格。
 ```
@@ -171,5 +171,52 @@ if loan_match:
 ```
 - 正则表达式查找“贷款金额”后跟美元符号或数字。
 -    如果找到，我们就提取数值并打印它。
- 
- 
+
+## 步骤9：从OCR输出中提取边界框
+到目前为止，我们已经提取并清理了文本，但我们还需要识别每个单词在页面上出现的位置。
+我们将使用它pytesseract.image_to_data()来提取每个单词及其位置、置信度和其他 OCR 元数据。
+```
+# Extract bounding box data from OCR
+ocr_data = pytesseract.image_to_data(gray, output_type=pytesseract.Output.DICT)
+
+# Print first 5 extracted words with bounding boxes
+for i in range(5):
+    print(f"Word: {ocr_data['text'][i]}, BBox: ({ocr_data['left'][i]}, {ocr_data['top'][i]}, {ocr_data['width'][i]}, {ocr_data['height'][i]})")
+pytesseract.image_to_data(gray, output_type=pytesseract.Output.DICT)
+```
+- 返回包含文本位置的字典。
+- 我们打印前 5 个单词及其边界框坐标。
+## 步骤 10：为 OCR 检测到的单词绘制边界框
+现在我们有了边界框坐标，我们可以使用 OpenCV 在检测到的单词周围绘制框。
+在图像上可视化检测到的单词
+```
+import cv2
+from PIL import Image
+
+# Convert image to OpenCV BGR format
+img_bgr = cv2.cvtColor(gray, cv2.COLOR_RGB2BGR)
+
+# Get OpenCV image height for correct y-coordinate transformation
+page_height = gray.shape[0]
+
+# Define confidence threshold (ignore low-confidence words)
+confidence_threshold = 40
+
+# 📌 Step 9.1: Loop through Extracted OCR Words & Draw Bounding Boxes
+for i in range(len(ocr_data["text"])):
+    word = ocr_data["text"][i].strip()
+    x, y, w, h = ocr_data["left"][i], ocr_data["top"][i], ocr_data["width"][i], ocr_data["height"][i]
+    conf = int(ocr_data["conf"][i])  # Convert confidence to int
+
+    # Ignore empty words & low-confidence OCR text
+    if not word or conf < confidence_threshold:
+        continue
+
+    # Draw bounding box
+    cv2.rectangle(img_bgr, (x, y), (x + w, y + h), (0, 255, 0), 2)
+    cv2.putText(img_bgr, word, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
+# 📌 Step 9.2: Convert Back to RGB & Display the Image
+img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
+display(Image.fromarray(img_rgb))
+``` 
