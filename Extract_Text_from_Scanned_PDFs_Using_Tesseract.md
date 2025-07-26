@@ -220,3 +220,34 @@ for i in range(len(ocr_data["text"])):
 img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
 display(Image.fromarray(img_rgb))
 ``` 
+## 步骤 11：识别并突出显示文档中的关键字段
+现在我们已经成功提取并可视化了文本，让我们更进一步。
+我们不会为所有检测到的单词绘制边界框，而是仅突出显示抵押文件中重要的关键字段。
+1. 查找并突出显示关键字段
+我们将扫描 OCR 文本，找到关键词，并仅在它们周围绘制边界框。
+```
+# Define key fields to highlight
+key_fields = ["MORTGAGE", "NOTE", "LENDER", "PROPERTY ADDRESS", "DATE", "SIGNATURE"]
+
+# Convert image to OpenCV BGR format
+img_bgr = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+
+# Loop through extracted OCR words
+for i in range(len(ocr_data["text"])):
+    word = ocr_data["text"][i].strip().upper()  # Convert to uppercase for better matching
+    x, y, w, h = ocr_data["left"][i], ocr_data["top"][i], ocr_data["width"][i], ocr_data["height"][i]
+
+    if word in key_fields:  # Highlight only key fields found in the document
+        cv2.rectangle(img_bgr, (x, y), (x + w, y + h), (0, 0, 255), 2)  # Red bounding box
+        cv2.putText(img_bgr, word, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+
+# Convert back to RGB for display
+img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
+display(Image.fromarray(img_rgb))
+``` 
+- **key_fields** 我们定义一个想要突出显示的重要单词列表（ ）。
+- 我们循环遍历提取的 OCR 单词并检查它们是否与任何关键字段匹配。
+- 如果找到匹配项，我们将：
+--围绕该单词绘制一个红色矩形。
+--在其上方添加标签，以便于查看。
+- 我们显示的图像仅突出显示关键字段。
