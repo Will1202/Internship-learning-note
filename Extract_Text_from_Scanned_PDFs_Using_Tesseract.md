@@ -125,6 +125,7 @@ print("OCR Extracted Text:\n")
 print(ocr_text)
 ```
 **-oem 3**: 使用基于AI（基于LSTM的模型）的最佳OCR引擎。
+
 **l eng**:指定文本为英文。
 如果一切正常，我们应该会看到从扫描文档中提取的文本打印在终端上。
 然而，OCR 并非完美无缺——有时它会误读字符、添加空格或漏掉单词。
@@ -138,6 +139,37 @@ ocr_text = " ".join(ocr_text.split())
 print("Cleaned OCR Text:\n", ocr_text)
 ```
 **.split()** 将文本分解为单词列表。
-**" ".join(... )**将单词用单个空格重新组合在一起，删除多余的空格和换行符。
 
+**" ".join(... )** 将单词用单个空格重新组合在一起，删除多余的空格和换行符。
+- OCR 有时会误读字母和数字（例如，将“LOAN”误读为“L0AN”）。让我们使用文本替换来解决这个问题。
+```
+import re
+
+# Fix common OCR errors
+ocr_text = re.sub(r'\bL0AN\b', 'LOAN', ocr_text, flags=re.IGNORECASE)
+ocr_text = re.sub(r'\bM0RTGAGE\b', 'MORTGAGE', ocr_text, flags=re.IGNORECASE)
+ocr_text = re.sub(r'\b1NTEREST\b', 'INTEREST', ocr_text, flags=re.IGNORECASE)
+ocr_text = re.sub(r'[^a-zA-Z0-9\s,.%-]', '', ocr_text)  # Remove unwanted symbols
+
+print("Corrected OCR Text:\n", ocr_text)
+```
+我们用它**re.sub()** 来查找常见的 OCR 错误并用正确的单词替换它们：
+"L0AN"→"LOAN"
+"M0RTGAGE"→"MORTGAGE"
+"1NTEREST"→"INTEREST"
+## 步骤8：提取重要信息
+现在我们有了干净的文本，让我们提取关键的财务细节，如贷款金额、利率或借款人姓名。
+ 
+但是我们如何找到这些金额呢？OCR 不会告诉我们重要数据在哪里——它只会转储原始文本。我们将使用正则表达式 **re.search()** 在文本中查找贷款金额。
+```
+# Extract loan amount if present in the text
+loan_match = re.search(r"Loan Amount[:\s$]*([\d,]+)", ocr_text, re.IGNORECASE)
+
+if loan_match:
+    loan_amount = loan_match.group(1)
+    print(f"Extracted Loan Amount: ${loan_amount}")
+```
+- 正则表达式查找“贷款金额”后跟美元符号或数字。
+-    如果找到，我们就提取数值并打印它。
+ 
  
