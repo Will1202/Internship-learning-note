@@ -253,3 +253,29 @@ display(Image.fromarray(img_rgb))
   
   在其上方添加标签，以便于查看。
 - 我们显示的图像仅突出显示关键字段。
+## 步骤12：构建用于AI模型的提取数据
+现在我们已经成功突出显示了扫描文档中的关键字段，我们需要以结构化格式组织这些提取的信息。
+大多数 AI 系统都需要结构化数据来进行进一步处理、分类或训练。为此，我们将提取的关键字段及其边界框位置存储为 JSON 格式。
+```
+import json
+
+# Initialize an empty dictionary to store extracted key field data
+extracted_data = {}
+
+# Loop through detected words to extract key fields
+for i in range(len(ocr_data["text"])):
+    word = ocr_data["text"][i].strip().upper()
+    x, y, w, h = ocr_data["left"][i], ocr_data["top"][i], ocr_data["width"][i], ocr_data["height"][i]
+
+    if word in key_fields:
+        extracted_data[word] = {
+            "text": word,
+            "bounding_box": [x, y, w, h]
+        }
+
+# Convert extracted data into JSON format
+json_output = json.dumps(extracted_data, indent=4)
+
+# Print structured JSON output
+print(json_output)
+```    
