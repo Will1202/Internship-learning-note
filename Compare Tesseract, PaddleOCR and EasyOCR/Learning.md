@@ -30,6 +30,7 @@ images[0].save(image_path, "PNG")
 ```
  
 ## 步骤4：在图像上运行PaddleOCR
+```
 ocr = PaddleOCR(use_textline_orientation=True, lang='en')
 result = ocr.ocr(image_path)
 ```
@@ -37,6 +38,32 @@ PaddleOCR 读取文档后，会给出搜索结果列表。对于每个单词或�
 - 文本内容
 - 对此有多大信心
 - 文本在页面上的位置（以多边形框表示）
+
+## 步骤 5：使用 OpenCV 手动绘制边界框
+```
+# Load image using OpenCV
+img = cv2.imread(image_path)
+
+# Draw boxes
+for line in result[0]:
+    box, text_info = line
+    text, score = text_info
+    box = [(int(pt[0]), int(pt[1])) for pt in box]
+    cv2.polylines(img, [np.array(box)], isClosed=True, color=(255, 0, 0), thickness=2)
+    cv2.putText(img, text, box[0], cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)    
+```
+<img width="1094" height="685" alt="image" src="https://github.com/user-attachments/assets/546fcfcf-897d-4e2c-b5da-d246ad695a50" />
+
+## 步骤6：显示结果
+```
+# Convert and display the result
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+plt.figure(figsize=(12, 12))
+plt.imshow(img_rgb)
+plt.axis("off")
+plt.show()
+```
+现在您应该会看到 PDF 页面，其中包含显示文本位置的方框和标签。即使是位置奇怪或旋转的文本也会被识别出来，因为这些方框是基于多边形的，而不是简单的矩形。
 
 
 
