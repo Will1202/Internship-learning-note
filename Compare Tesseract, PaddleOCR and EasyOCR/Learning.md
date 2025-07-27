@@ -38,16 +38,5 @@ PaddleOCR 读取文档后，会给出搜索结果列表。对于每个单词或�
 - 对此有多大信心
 - 文本在页面上的位置（以多边形框表示）
 
-## 步骤 5：使用 OpenCV 手动绘制边界框
-```
-# Load image using OpenCV
-img = cv2.imread(image_path)
 
-# Draw boxes
-for line in result[0]:
-    box, text_info = line
-    text, score = text_info
-    box = [(int(pt[0]), int(pt[1])) for pt in box]
-    cv2.polylines(img, [np.array(box)], isClosed=True, color=(255, 0, 0), thickness=2)
-    cv2.putText(img, text, box[0], cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
-```
+
