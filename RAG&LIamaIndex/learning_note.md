@@ -14,5 +14,18 @@
 <img width="841" height="700" alt="image" src="https://github.com/user-attachments/assets/e388a69e-9809-46a1-9eff-86bde74fe40c" />
 <img width="1090" height="861" alt="image" src="https://github.com/user-attachments/assets/8c108d1e-8986-42a9-9431-6816515809d0" />
 
+# LlamaIndex
+LlamaIndex 是一个强大的框架，可以帮助Gemini、DeepSeek 或 GPT-4等 AI 模型查找、组织和使用来自外部来源（例如 PDF、数据库、Notion 页面甚至 Google Drive）的信息。
+
+-没有 LlamaIndex → AI 无法看到你的文件。它只是根据预训练进行猜测。
+-使用 LlamaIndex → AI 可以直接从您的数据中搜索、理解和引用，就像研究助理一样。
+
+<img width="1083" height="952" alt="image" src="https://github.com/user-attachments/assets/1f59c13b-cb9e-4fdb-888b-b598a367500c" />
+<img width="1073" height="1091" alt="image" src="https://github.com/user-attachments/assets/a850fc3f-5017-4e8a-8191-77cdf851d8bb" />
+<img width="1092" height="763" alt="image" src="https://github.com/user-attachments/assets/4316a787-7260-41b8-be8d-40f08144a959" />
+
+
+
+
 
  
