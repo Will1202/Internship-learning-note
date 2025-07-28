@@ -145,7 +145,7 @@ for i, text in enumerate(extracted_text, 1):
 ```
 
 
-# 三种OCR的比较
+# *三种OCR的比较*
 <img width="890" height="193" alt="image" src="https://github.com/user-attachments/assets/a86ebcd7-ac52-44e0-b9b2-082498455019" />
 
  
