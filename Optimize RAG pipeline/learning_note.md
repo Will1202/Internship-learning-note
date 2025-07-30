@@ -21,11 +21,11 @@
 
 
 **创建一个人工智能处理文档**
-# 步骤 1：安装所需的库
+## 步骤 1：安装所需的库
 ```
 !pip install llama-index llama-index-embeddings-huggingface llama-index-llms-gemini
 ```
-# 第 2 步：加载示例文档（纯文本或 PDF）
+## 第 2 步：加载示例文档（纯文本或 PDF）
 无需分块即可开始
 让我们首先加载一个没有分块的文档，看看会发生什么。
 ```
@@ -36,10 +36,10 @@ documents = SimpleDirectoryReader("sample_docs").load_data()
 print(f"Loaded {len(documents)} documents.")
 ```
 
-# 步骤3：应用不同的分块策略
+## 步骤3：应用不同的分块策略
 既然我们已经看到了问题，让我们探索将文档分解成可管理块的不同方法。
  
-## 固定长度分块
+### 固定长度分块
 将文本拆分成大小相等的块（例如，每块 300 个标记）。
 最适合结构化文本，但可能会尴尬地切断句子。
 ```
@@ -51,7 +51,7 @@ print(f"Total Fixed-Length Chunks Created: {len(chunks_fixed)}")
 ```
 **预期结果**：检索速度快，但句子被截断时可能会丢失上下文。
  
-## 重叠分块
+### 重叠分块
 重叠的块承载着前一个块的一部分，以保持上下文的完整性。
 防止人工智能在检索信息时丢失含义。
 ```
@@ -61,7 +61,7 @@ print(f"Total Overlapping Chunks Created: {len(chunks_overlap)}")
 ```
 **预期结果**：检索更准确，句子连贯性更顺畅。但也存在一个缺点——由于文本重叠，存储空间使用量会略有增加。
  
-## 语义分块（高级）
+### 语义分块（高级）
 使用AI 嵌入来查找自然的话题转变并进行相应的分割。
 当文档包含多个不相关的部分时，效果最佳。
 ```
@@ -73,7 +73,7 @@ print(f"Total Semantic Chunks Created: {len(chunks_semantic)}")
 ```
 **预期结果**：更多上下文感知的词块，以实现更佳的检索效果。但这也存在一个弊端——与其他方法相比，需要额外的处理时间。
  
-# 步骤 4：生成用于检索的嵌入
+## 步骤 4：生成用于检索的嵌入
 现在我们已经将文档分块，让我们使用嵌入将每个块转换为向量表示。
 ```
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
