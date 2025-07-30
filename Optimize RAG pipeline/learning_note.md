@@ -131,6 +131,7 @@ print(response)
 - 第 2 步：向量搜索→AI 检索概念上相似的内容。
 - 步骤 3：合并和重新排序→AI 将两者融合以产生最佳响应。
  
+<img width="1075" height="452" alt="image" src="https://github.com/user-attachments/assets/85692367-d769-4254-aeb7-e97d25cd370d" />
 
 
 
