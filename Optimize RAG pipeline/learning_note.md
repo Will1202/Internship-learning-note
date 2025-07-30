@@ -20,6 +20,7 @@
 <img width="1475" height="794" alt="image" src="https://github.com/user-attachments/assets/a012a118-abbf-4896-9f18-253460d80b58" />
 
 
+**创建一个人工智能处理文档**
 # 步骤 1：安装所需的库
 ```
 !pip install llama-index llama-index-embeddings-huggingface llama-index-llms-gemini
@@ -106,5 +107,30 @@ print(response)
 观察结果：
 
 通过分块和嵌入，AI 可以检索最相关的文本，而不是转储整个文档！
+
+
+<img width="1056" height="550" alt="image" src="https://github.com/user-attachments/assets/a8c58a50-9187-4e32-8be8-fba812a9629f" />
+
+<img width="1045" height="362" alt="image" src="https://github.com/user-attachments/assets/2f055b12-edc0-4774-bb6c-70e662d7bc11" />
+
+# 检索重排序：排序最佳结果
+假设你的人工智能找到了几条相关信息，但并非所有信息都同样有用。重新排序可以解决这个问题。
+它重新组织检索到的结果，将最有用的结果放在顶部，因此您的最终答案更有力、更清晰、更准确。
+
+## 重新排序技术
+人工智能使用不同的策略来决定哪些检索结果最有帮助：
+<img width="1046" height="375" alt="image" src="https://github.com/user-attachments/assets/0461a633-89b0-4767-9100-70e332425df0" />
+
+# 混合检索：结合关键词和向量搜索
+好的答案并非单靠一种策略就能得出。关键词搜索（例如谷歌）虽然能提供精准度，但却会忽略细微差别。向量搜索（使用嵌入）能提供含义，但可能会忽略确切的术语。
+
+**混合检索**正是这样做的——合并关键字和向量搜索以提供既准确又上下文丰富的响应。
+
+混合检索的工作原理
+-步骤 1：关键词搜索→AI 查找具有精确词语匹配的部分。
+- 第 2 步：向量搜索→AI 检索概念上相似的内容。
+- 步骤 3：合并和重新排序→AI 将两者融合以产生最佳响应。
+ 
+
 
 
