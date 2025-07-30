@@ -86,6 +86,25 @@ for chunk in chunks_overlap:  # Using Overlapping Chunks for best retrieval
 
 print("Embeddings Generated Successfully!")
 ```
-这将加载一个预先训练好的模型，该模型知道如何将文本转换为嵌入。您正在使用一个轻量级但功能强大的模型，名为MiniLM。
+这将加载一个预先训练好的模型，该模型知道如何将文本转换为嵌入。您正在使用一个轻量级但功能强大的模型，名为*MiniLM*。
+
+## 步骤 5：使用 Gemini 存储和检索嵌入
+现在我们已经对文本进行了分块和嵌入，让我们存储嵌入并测试文档检索。
+```
+from llama_index.core import VectorStoreIndex
+
+# Create an index with our embeddings
+index = VectorStoreIndex.from_documents(documents, embed_model=embed_model)
+
+# Set up query engine
+query_engine = index.as_query_engine()
+
+# Test a retrieval query
+response = query_engine.query("What is the document about?")
+print(response)
+```
+观察结果：
+
+通过分块和嵌入，AI 可以检索最相关的文本，而不是转储整个文档！
 
 
