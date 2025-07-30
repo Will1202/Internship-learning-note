@@ -20,4 +20,72 @@
 <img width="1475" height="794" alt="image" src="https://github.com/user-attachments/assets/a012a118-abbf-4896-9f18-253460d80b58" />
 
 
+# 步骤 1：安装所需的库
+```
+!pip install llama-index llama-index-embeddings-huggingface llama-index-llms-gemini
+```
+# 第 2 步：加载示例文档（纯文本或 PDF）
+无需分块即可开始
+让我们首先加载一个没有分块的文档，看看会发生什么。
+```
+from llama_index.core import SimpleDirectoryReader
+
+# Load PDF or text document
+documents = SimpleDirectoryReader("sample_docs").load_data()
+print(f"Loaded {len(documents)} documents.")
+```
+
+# 步骤3：应用不同的分块策略
+既然我们已经看到了问题，让我们探索将文档分解成可管理块的不同方法。
+ 
+## 固定长度分块
+将文本拆分成大小相等的块（例如，每块 300 个标记）。
+最适合结构化文本，但可能会尴尬地切断句子。
+```
+from llama_index.core.node_parser import SentenceSplitter
+
+splitter_fixed = SentenceSplitter(chunk_size=300, chunk_overlap=0)  # No overlap
+chunks_fixed = splitter_fixed.get_nodes_from_documents(documents)
+print(f"Total Fixed-Length Chunks Created: {len(chunks_fixed)}")
+```
+**预期结果**：检索速度快，但句子被截断时可能会丢失上下文。
+ 
+## 重叠分块
+重叠的块承载着前一个块的一部分，以保持上下文的完整性。
+防止人工智能在检索信息时丢失含义。
+```
+splitter_overlap = SentenceSplitter(chunk_size=300, chunk_overlap=50)  # 50-token overlap
+chunks_overlap = splitter_overlap.get_nodes_from_documents(documents)
+print(f"Total Overlapping Chunks Created: {len(chunks_overlap)}")
+```
+**预期结果**：检索更准确，句子连贯性更顺畅。但也存在一个缺点——由于文本重叠，存储空间使用量会略有增加。
+ 
+## 语义分块（高级）
+使用AI 嵌入来查找自然的话题转变并进行相应的分割。
+当文档包含多个不相关的部分时，效果最佳。
+```
+from llama_index.core.node_parser import SemanticSplitter
+
+semantic_splitter = SemanticSplitter()
+chunks_semantic = semantic_splitter.get_nodes_from_documents(documents)
+print(f"Total Semantic Chunks Created: {len(chunks_semantic)}")
+```
+**预期结果**：更多上下文感知的词块，以实现更佳的检索效果。但这也存在一个弊端——与其他方法相比，需要额外的处理时间。
+ 
+# 步骤 4：生成用于检索的嵌入
+现在我们已经将文档分块，让我们使用嵌入将每个块转换为向量表示。
+```
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+
+# Load embedding model
+embed_model = HuggingFaceEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2")
+
+# Apply embeddings
+for chunk in chunks_overlap:  # Using Overlapping Chunks for best retrieval
+    chunk.embedding = embed_model.get_text_embedding(chunk.text)
+
+print("Embeddings Generated Successfully!")
+```
+这将加载一个预先训练好的模型，该模型知道如何将文本转换为嵌入。您正在使用一个轻量级但功能强大的模型，名为MiniLM。
+
 
